@@ -1,19 +1,14 @@
 import { Command, flags } from "@oclif/command";
 import * as cliSelect from "cli-select";
-import { promises } from "fs";
 import * as path from "path";
-import { getMarkdownTags, walk } from "../utils/files.utils";
+import { getMarkdownFiles } from "../utils/files.utils";
 import { getSettings } from "../utils/settings.utils";
 const openEditor = require("open-editor");
 
 export default class Search extends Command {
   static description = "describe the command here";
 
-  static examples = [
-    `$ notable-cli search -t nodejs -c Cheatsheet
-/home/alexandre/Documents/@plaintext/notes/Javascript - Cheatsheet.md
-`,
-  ];
+  static examples = [`$ notable-cli search -t nodejs -c Cheatsheet`];
 
   static flags = {
     help: flags.help({ char: "h" }),
@@ -22,6 +17,11 @@ export default class Search extends Command {
       char: "t",
       description: "Tags to search",
       multiple: true,
+    }),
+    sort: flags.string({
+      char: "s",
+      description: "sort",
+      options: ["created", "modified"],
     }),
     // flag with no value (-f, --force)
     content: flags.string({ char: "c", multiple: true }),
@@ -42,38 +42,11 @@ export default class Search extends Command {
       return;
     }
 
-    let files = await walk(settings.path);
-
-    if (flags.tags !== undefined) {
-      const fileToExclude: string[] = [];
-
-      for (const file of files) {
-        const tags = await getMarkdownTags(file);
-
-        if (!flags.tags.every((tag) => tags.includes(tag))) {
-          fileToExclude.push(file);
-        }
-      }
-
-      files = files.filter((file) => !fileToExclude.includes(file));
-    }
-
-    if (flags.content !== undefined) {
-      const fileToExclude: string[] = [];
-
-      for (const file of files) {
-        const fileContent = await promises.readFile(file);
-
-        if (!flags.content.every((content) => fileContent.includes(content))) {
-          fileToExclude.push(file);
-        }
-      }
-
-      files = files.filter((file) => !fileToExclude.includes(file));
-    }
+    const files = await getMarkdownFiles(settings.path, flags);
 
     if (files.length === 0) {
-      this.log(`Cannot find any matching file`);
+      this.warn(`Cannot find any matching file`);
+      return;
     } else if (files.length === 1) {
       openEditor(files);
     } else {
