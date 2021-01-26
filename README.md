@@ -1,5 +1,4 @@
-notable-cli
-===========
+# notable-cli
 
 A Notable command line client
 
@@ -8,12 +7,18 @@ A Notable command line client
 [![Downloads/week](https://img.shields.io/npm/dw/notable-cli.svg)](https://npmjs.org/package/notable-cli)
 [![License](https://img.shields.io/npm/l/notable-cli.svg)](https://github.com/madeindjs/notable-cli/blob/master/package.json)
 
+![Screenshot of search feature](./screenshot/search.webm)
+
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g notable-cli
 $ notable-cli COMMAND
@@ -25,11 +30,17 @@ USAGE
   $ notable-cli COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`notable-cli hello [FILE]`](#notable-cli-hello-file)
-* [`notable-cli help [COMMAND]`](#notable-cli-help-command)
+
+- [`notable-cli hello [FILE]`](#notable-cli-hello-file)
+- [`notable-cli help [COMMAND]`](#notable-cli-help-command)
+- [`notable-cli search`](#notable-cli-search)
+- [`notable-cli settings`](#notable-cli-settings)
 
 ## `notable-cli hello [FILE]`
 
@@ -43,6 +54,7 @@ OPTIONS
   -f, --force
   -h, --help       show CLI help
   -n, --name=name  name to print
+  -t, --test
 
 EXAMPLE
   $ notable-cli hello
@@ -67,4 +79,43 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+
+## `notable-cli search`
+
+describe the command here
+
+```
+USAGE
+  $ notable-cli search
+
+OPTIONS
+  -c, --content=content
+  -h, --help             show CLI help
+  -t, --tags=tags        Tags to search
+
+EXAMPLE
+  $ notable-cli search -t nodejs -c Cheatsheet
+  /home/alexandre/Documents/@plaintext/notes/Javascript - Cheatsheet.md
+```
+
+_See code: [src/commands/search.ts](https://github.com/madeindjs/notable-cli/blob/v0.0.0/src/commands/search.ts)_
+
+## `notable-cli settings`
+
+Set settings of notable-cli
+
+```
+USAGE
+  $ notable-cli settings
+
+OPTIONS
+  -h, --help       show CLI help
+  -p, --path=path  Set path of Notables notes
+
+EXAMPLE
+  $ notable-cli settings --path ~/Notable/notes
+```
+
+_See code: [src/commands/settings.ts](https://github.com/madeindjs/notable-cli/blob/v0.0.0/src/commands/settings.ts)_
+
 <!-- commandsstop -->

@@ -13,6 +13,7 @@
     "@oclif/plugin-help": "^3.2.1",
     "cli-select": "^1.1.2",
     "gray-matter": "^4.0.2",
+    "open-editor": "^3.0.0",
     "tslib": "^1.14.1"
   },
   "devDependencies": {

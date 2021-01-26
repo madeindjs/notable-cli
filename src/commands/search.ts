@@ -1,9 +1,10 @@
 import { Command, flags } from "@oclif/command";
+import * as cliSelect from "cli-select";
 import { promises } from "fs";
 import * as path from "path";
 import { getMarkdownTags, walk } from "../utils/files.utils";
 import { getSettings } from "../utils/settings.utils";
-const cliSelect = require("cli-select");
+const openEditor = require("open-editor");
 
 export default class Search extends Command {
   static description = "describe the command here";
@@ -71,13 +72,18 @@ export default class Search extends Command {
       files = files.filter((file) => !fileToExclude.includes(file));
     }
 
-    // cliSelect(files);
-    const { value }: { value: string; id: number } = await cliSelect({
-      values: files,
-      valueRenderer: (value: string, selected: boolean) =>
-        value.replace(settings.path as string, "").replace(path.sep, ""),
-    });
+    if (files.length === 0) {
+      this.log(`Cannot find any matching file`);
+    } else if (files.length === 1) {
+      openEditor(files);
+    } else {
+      const { value }: { value: string } = await cliSelect({
+        values: files,
+        valueRenderer: (value: string, selected: boolean) =>
+          value.replace(settings.path as string, "").replace(path.sep, ""),
+      });
 
-    // files.forEach((file) => this.log(file));
+      openEditor([value]);
+    }
   }
 }
