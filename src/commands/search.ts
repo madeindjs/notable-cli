@@ -1,7 +1,9 @@
 import { Command, flags } from "@oclif/command";
 import { promises } from "fs";
+import * as path from "path";
 import { getMarkdownTags, walk } from "../utils/files.utils";
 import { getSettings } from "../utils/settings.utils";
+const cliSelect = require("cli-select");
 
 export default class Search extends Command {
   static description = "describe the command here";
@@ -69,6 +71,13 @@ export default class Search extends Command {
       files = files.filter((file) => !fileToExclude.includes(file));
     }
 
-    files.forEach((file) => this.log(file));
+    // cliSelect(files);
+    const { value }: { value: string; id: number } = await cliSelect({
+      values: files,
+      valueRenderer: (value: string, selected: boolean) =>
+        value.replace(settings.path as string, "").replace(path.sep, ""),
+    });
+
+    // files.forEach((file) => this.log(file));
   }
 }
