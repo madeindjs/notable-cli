@@ -7,7 +7,7 @@ A Notable command line client
 [![Downloads/week](https://img.shields.io/npm/dw/notable-cli.svg)](https://npmjs.org/package/notable-cli)
 [![License](https://img.shields.io/npm/l/notable-cli.svg)](https://github.com/madeindjs/notable-cli/blob/master/package.json)
 
-![Screenshot of search feature](./screenshot/search.webm)
+![Screenshot of search feature](https://raw.githubusercontent.com/madeindjs/notable-cli/master/screenshots/search.webm)
 
 <!-- toc -->
 
