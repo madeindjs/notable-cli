@@ -8,11 +8,13 @@ const openEditor = require("open-editor");
 export default class Search extends Command {
   static description = "describe the command here";
 
-  static examples = [`$ notable-cli search -t nodejs -c Cheatsheet`];
+  static examples = [
+    `$ notable-cli search '#nodejs Cheatsheet'`,
+    `$ notable-cli search -t nodejs -c Cheatsheet`,
+  ];
 
   static flags = {
     help: flags.help({ char: "h" }),
-    // // flag with a value (-n, --name=VALUE)
     tags: flags.string({
       char: "t",
       description: "Tags to search",
@@ -23,15 +25,28 @@ export default class Search extends Command {
       description: "sort",
       options: ["created", "modified"],
     }),
-    // flag with no value (-f, --force)
     content: flags.string({ char: "c", multiple: true }),
-    // test: flags.boolean({ char: "t" }),
   };
-
-  // static args = [{ name: "tags" }];
+  static args = [{ name: "query" }];
 
   async run() {
     const { args, flags } = this.parse(Search);
+
+    const query: string | undefined = args.query;
+
+    if (query !== undefined) {
+      let tagsMatches = query.match(/\#\w*/g);
+
+      if (tagsMatches instanceof Array) {
+        tagsMatches.forEach((m) => query.replace(m, ""));
+
+        flags.tags = flags.tags instanceof Array ? flags.tags : [];
+        flags.tags.push(...tagsMatches.map((m) => m.replace("#", "")));
+      }
+
+      flags.content = flags.content instanceof Array ? flags.content : [];
+      flags.content.push(query);
+    }
 
     const settings = await getSettings();
 
